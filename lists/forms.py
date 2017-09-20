@@ -19,3 +19,9 @@ class ItemForm(forms.models.ModelForm):
         error_messages = {
             'text': {'required': EMPTY_ITEM_ERROR}
         }
+
+
+    def save(self, for_list):
+        self.instance.list = for_list
+        # No args req by super, >cp3 :- https://www.python.org/dev/peps/pep-3135/
+        return super(ItemForm, self).save()
