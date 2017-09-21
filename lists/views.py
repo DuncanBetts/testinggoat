@@ -2,9 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import redirect, render
-from django.core.exceptions import ValidationError
 
-from lists.models import Item, List
+from lists.models import List
 from lists.forms import ItemForm, ExistingListItemForm
 
 
