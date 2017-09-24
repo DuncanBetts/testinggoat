@@ -46,22 +46,22 @@ def _update_settings(source_folder, site_name):
 def _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + '/../virtualenv'
     if not exists(virtualenv_folder + '/bin/pip3'):
-        run('pypy3 -m ensurepip')
-        run('pypy3 -m pip install virtualenv')
-        run('pypy3 -m virtualenv {}'.format(virtualenv_folder))
+        run('python -m ensurepip')
+        run('python -m pip install virtualenv')
+        run('python -m virtualenv {}'.format(virtualenv_folder))
     run('{}/bin/pip3 install -r {}/requirements.txt'
         .format(virtualenv_folder, source_folder))
 
 
 def _update_static_files(source_folder):
     run('cd {}'
-        ' && ../virtualenv/bin/pypy3 manage.py collectstatic --noinput'
+        ' && ../virtualenv/bin/python manage.py collectstatic --noinput'
         .format(source_folder)
         )
 
 
 def _update_database(source_folder):
     run('cd {}'
-        ' && ../virtualenv/bin/pypy3 manage.py migrate --noinput'
+        ' && ../virtualenv/bin/python manage.py migrate --noinput'
         .format(source_folder)
         )
