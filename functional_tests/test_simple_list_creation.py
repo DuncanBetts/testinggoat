@@ -1,6 +1,8 @@
-from .base import FunctionalTest
+# pylint: disable=C0103
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+
+from .base import FunctionalTest
 
 
 class NewVisitorTest(FunctionalTest):
