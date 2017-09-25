@@ -1,5 +1,5 @@
 from fabric.contrib.files import append, exists, sed
-from fabric.api import env, local, run
+from fabric.api import env, local, run, sudo
 
 REPO_URL = 'git@github.com:DuncanBetts/testinggoat.git'
 
@@ -10,6 +10,7 @@ def deploy():
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
     _update_settings(source_folder, env.host)
+    _ensure_python_dependencies()
     _update_virtualenv(source_folder)
     _update_static_files(source_folder)
     _update_database(source_folder)
@@ -41,6 +42,15 @@ def _update_settings(source_folder, site_name):
         key = run('openssl rand -base64 30')
         append(secret_key_file, 'SECRET_KEY = "{}"'.format(key))
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
+
+
+def _ensure_python_dependencies():
+    sudo('apt-get update && '
+         'apt-get install --no-install-recommends -qq'
+         ' build-essential libffi-dev python-dev'
+         ' libssl-dev libxml2-dev libxslt1-dev'
+         ' libjpeg8-dev zlib1g-dev'
+         )
 
 
 def _update_virtualenv(source_folder):
