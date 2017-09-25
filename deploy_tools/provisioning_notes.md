@@ -39,6 +39,7 @@ eg, on Debian:
 
 * see gunicorn-systemd.template.service
 * replace SITENAME with, e.g., staging.my-domain.co.uk
+* replace SEKRIT with email password
 
 ## Folder structure
 
