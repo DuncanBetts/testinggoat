@@ -1,6 +1,7 @@
 # pylint: disable=R0201, C0103
 import time
 import os
+from datetime import datetime
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -10,6 +11,10 @@ from selenium.webdriver.common.keys import Keys
 from .server_tools import reset_database
 
 MAX_WAIT = 10
+
+SCREEN_DUMP_LOCATION = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'screendumps'
+)
 
 
 def wait(fn):
@@ -35,7 +40,44 @@ class FunctionalTest(StaticLiveServerTestCase):
             reset_database(self.staging_server)
 
     def tearDown(self):
+        if self._test_has_failed():
+            if not os.path.exists(SCREEN_DUMP_LOCATION):
+                os.makedirs(SCREEN_DUMP_LOCATION)
+            for ix, handle in enumerate(self.browser.window_handles):
+                self._windowid = ix
+                self.browser.switch_to_window(handle)
+                self.take_screenshot()
+                self.dump_html()
         self.browser.quit()
+        super(StaticLiveServerTestCase, self).tearDown()
+
+    def _test_has_failed(self):
+        if hasattr(self, '_outcome'):  # Python 3.4+
+            return any(error for (method, error) in self._outcome.errors)
+        else:   # If I require Python 2.7 - 3.3 support for this feature:
+                # https://stackoverflow.com/questions/4414234/getting-pythons-unittest-results-in-a-teardown-method
+            pass
+
+    def dump_html(self):
+        filename = self._get_filename() + '.html'
+        print('dumping page HTML to', filename)
+        with open(filename, 'w') as f:
+            f.write(self.browser.page_source)
+
+    def take_screenshot(self):
+        filename = self._get_filename() + '.png'
+        print('screenshotting to', filename)
+        self.browser.get_screenshot_as_file(filename)
+
+    def _get_filename(self):
+        timestamp = datetime.now().isoformat().replace(':', '.')[:19]
+        return '{folder}/{cname}.{method}-window{windowid}-{tstamp}'.format(
+            folder=SCREEN_DUMP_LOCATION,
+            cname=self.__class__.__name__,
+            method=self._testMethodName,
+            windowid=self._windowid,
+            tstamp=timestamp
+        )
 
     def add_list_item(self, item_text):
         num_rows = len(
