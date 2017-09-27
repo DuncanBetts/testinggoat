@@ -10,7 +10,11 @@ from selenium.webdriver.common.keys import Keys
 
 from .server_tools import reset_database
 
-MAX_WAIT = 10
+HOSTNAME = os.uname()[1]
+if HOSTNAME == 'jenkins':
+    MAX_WAIT = 30
+else:
+    MAX_WAIT = 10
 
 SCREEN_DUMP_LOCATION = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'screendumps'
