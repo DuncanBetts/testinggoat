@@ -44,12 +44,10 @@ def _update_settings(source_folder, site_name):
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
 
-def _ensure_python_dependencies():
+def _ensure_fabric_dependencies():
     sudo('apt-get update && '
          'apt-get install --no-install-recommends -qq'
-         ' build-essential libffi-dev python-dev'
-         ' libssl-dev libxml2-dev libxslt1-dev'
-         ' libjpeg8-dev zlib1g-dev'
+         ' build-essential libffi-dev libssl-dev'
          )
 
 

@@ -1,6 +1,10 @@
 # pylint: disable=C0103
 import unittest
-from mock import patch, Mock
+try:
+    from mock import patch, Mock
+except ImportError:
+    from unittest.mock import patch, Mock
+
 
 from lists.models import Item, List
 from lists.forms import (

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=C0103
 from __future__ import unicode_literals
+import unittest
 
 from lists.views import new_list
 from lists.models import Item, List
@@ -9,8 +10,10 @@ from lists.forms import (
     ItemForm, ExistingListItemForm,
 )
 
-import unittest
-from mock import patch, Mock
+try:
+    from mock import patch, Mock
+except ImportError:
+    from unittest.mock import patch, Mock
 
 from django.http import HttpRequest
 from django.test import TestCase

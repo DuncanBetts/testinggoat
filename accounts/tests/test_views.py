@@ -1,9 +1,10 @@
 # pylint: disable=C0103, W0201
-from mock import patch, call
+try:
+    from mock import patch, call
+except ImportError:
+    from unittest.mock import patch, call
 
 from django.test import TestCase
-from django.utils.html import escape
-import accounts.views  # noqa: F401
 from accounts.models import Token
 
 
