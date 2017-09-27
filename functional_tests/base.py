@@ -54,9 +54,8 @@ class FunctionalTest(StaticLiveServerTestCase):
     def _test_has_failed(self):
         if hasattr(self, '_outcome'):  # Python 3.4+
             return any(error for (method, error) in self._outcome.errors)
-        else:   # If I require Python 2.7 - 3.3 support for this feature:
-                # https://stackoverflow.com/questions/4414234/getting-pythons-unittest-results-in-a-teardown-method
-            pass
+        else:   # Python 2.7 - 3.3
+            return len(self._resultForDoCleanups.failures)
 
     def dump_html(self):
         filename = self._get_filename() + '.html'
