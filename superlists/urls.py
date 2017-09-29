@@ -18,6 +18,7 @@ from lists import views as list_views
 from lists import urls as list_urls
 from accounts import urls as account_urls
 
+# It's better to handle favicon (and all static assets) in NGINX
 urlpatterns = [
     url(r'^$', list_views.home_page, name='home'),
     url(r'^lists/', include(list_urls)),

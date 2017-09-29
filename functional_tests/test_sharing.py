@@ -2,6 +2,7 @@
 from selenium import webdriver
 from .base import FunctionalTest
 from .list_page import ListPage
+from .my_lists_page import MyListsPage
 
 
 def quit_if_possible(browser):
@@ -12,7 +13,7 @@ def quit_if_possible(browser):
 class SharingTest(FunctionalTest):
 
     def test_can_share_a_list_with_another_user(self):
-        # Edith is a logged-in  user
+        # Edith is a logged-in user
         self.create_pre_authenticated_session('edith@example.com')
         edith_browser = self.browser
         self.addCleanup(lambda: quit_if_possible(edith_browser))
@@ -38,3 +39,10 @@ class SharingTest(FunctionalTest):
         # She shares her list.
         # The page updates to say that it's shared with Oniciferous:
         list_page.share_list_with('oniciferous@example.com')
+
+        # Oniciferous now goes to the lists page with his browser
+        self.browser = oni_browser
+        MyListsPage(self).go_to_my_lists_page()
+
+        # He sees Edith's list in there!
+        self.browser.find_element_by_link_text('Get help').click()

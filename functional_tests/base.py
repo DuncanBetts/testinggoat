@@ -107,10 +107,10 @@ class FunctionalTest(StaticLiveServerTestCase):
         return fn()
 
     def wait_for_email(self, test_email, subject):
-        if not self.test.staging_server:
+        if not self.staging_server:
             email = mail.outbox[0]
-            self.test.assertIn(test_email, email.to)
-            self.test.assertEqual(email.subject, subject)
+            self.assertIn(test_email, email.to)
+            self.assertEqual(email.subject, subject)
             return email.body
         email_id = None
         start = time.time()
